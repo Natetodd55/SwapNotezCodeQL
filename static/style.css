@@ -1,0 +1,27 @@
+nav ul li{
+    display: inline;
+    padding: 5px;
+}
+
+nav ul{
+    list-style-type: none;
+}
+
+nav{
+    background-color: bisque;
+    width: 30%;
+}
+
+nav ul li a:link, nav ul li a:visited{
+    color: hotpink;
+}
+
+nav ul li a:hover{
+    color:lime;
+}
+
+td.label{
+    font-size: 30px;
+    border-style: solid;
+    font-style: bold;
+}

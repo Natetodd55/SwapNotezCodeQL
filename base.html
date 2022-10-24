@@ -1,9 +1,7 @@
 <html>
-
   <head>
-    <link href="CSS">
+    <link href="/static/style.css" rel="stylesheet">
   </head>
-
   <body>
     <nav>
       <ul>
@@ -11,8 +9,10 @@
         <li><a href='/search'>Find Assignments</a></li>
         <li><a href='/upload'>Upload Assignments</a></li>
         <li><a href='/login'>Login</a></li>
-        </luul>
+        </ul>
     </nav>
+      {% block content %}
+      {% endblock %}
   </body>
 
 </html>
