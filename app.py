@@ -51,6 +51,22 @@ def login():
 
 
 
+@app.route('/create', methods = ['GET', 'POST'])
+def create():
+    if request.method == 'POST':
+        username = request.form['uName']
+        email = request.form['email']
+        password = request.form['pWord']
+        temp = User(username = username, password = password, email = email)
+        user = User.query.filter_by(username=request.form['uName']).first()
+        if user != None:
+            return render_template('create.html'), 'username already exists'
+        db.session.add(temp)
+        db.session.commit()
+        user = User.query.filter_by(username=request.form['uName']).first()
+        login_user(user)
+        return flask.redirect('/')
+    return render_template('create.html')
 
 # @app.route('/update/', methods = ['GET', 'POST'])
 # @login_required
@@ -69,11 +85,11 @@ def login():
 
 
 
-# @app.route('/logout')
-# @login_required
-# def logout():
-#     logout_user()
-#     return flask.redirect('/')
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return flask.redirect('/')
 
 
 
