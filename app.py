@@ -53,7 +53,7 @@ def create():
         login_user(user)
         return flask.redirect('/')
     return render_template('create.html')
-    
+
 # @app.route('/update/', methods = ['GET', 'POST'])
 # @login_required
 # def update():
