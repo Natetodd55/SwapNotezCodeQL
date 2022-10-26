@@ -5,11 +5,10 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = 'secretKey'
 login_manager = LoginManager(app)
 login_manager.init_app(app)
-
+db = SQLAlchemy(app)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,24 +16,13 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(20), nullable=False)
 
-
-
-from app import db, User
-
-
 @login_manager.user_loader
 def load_user(uid):
-    user = User.query.get(uid)
-    return user
-
-
+    return uid
 
 @app.route('/')
 def home():
     return render_template('home.html')
-
-
-
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -48,8 +36,6 @@ def login():
             return flask.redirect('/')
         return render_template('login.html')
     return render_template('login.html')
-
-
 
 @app.route('/create', methods = ['GET', 'POST'])
 def create():
@@ -67,7 +53,7 @@ def create():
         login_user(user)
         return flask.redirect('/')
     return render_template('create.html')
-
+    
 # @app.route('/update/', methods = ['GET', 'POST'])
 # @login_required
 # def update():
@@ -81,18 +67,13 @@ def create():
 #         return flask.redirect('/')
 #     return render_template('update.html')
 
-
-
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return flask.redirect('/')
-
-
+# @app.route('/logout')
+# @login_required
+# def logout():
+#     logout_user()
+#     return flask.redirect('/')
 
 if __name__ == "__main__":
+    app.run(host="localhost", port=8000, debug=True)
     db.create_all()
-    app.run(debug=True)
+   
