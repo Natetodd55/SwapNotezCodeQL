@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% if current_user.is_authenticated %}
+    {% block content %}
+        <!-- CODE FOR UPLOADIING ASSIGNMENTS -->
+    {% endblock %}
+{% else %}
+    {% block content %}
+        If you want to upload an assignment, please <a href='/login'>login</a>
+    {% endblock %}
