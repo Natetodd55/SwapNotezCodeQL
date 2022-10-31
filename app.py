@@ -54,6 +54,17 @@ def create():
         return flask.redirect('/')
     return render_template('create.html')
 
+
+
+@app.route('/upload', methods = ['GET', 'POST'])
+def upload():    
+    return render_template('upload.html')
+
+
+@app.route('/search', methods = ['GET', 'POST'])
+def upload():    
+    return render_template('search.html')
+
 # @app.route('/update/', methods = ['GET', 'POST'])
 # @login_required
 # def update():
