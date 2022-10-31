@@ -56,13 +56,13 @@ def create():
 
 
 
-@app.route('/upload', methods = ['GET', 'POST'])
-def upload():    
+@app.route('/upload')
+def upload():  
     return render_template('upload.html')
 
 
-@app.route('/search', methods = ['GET', 'POST'])
-def upload():    
+@app.route('/search')
+def search():    
     return render_template('search.html')
 
 # @app.route('/update/', methods = ['GET', 'POST'])
@@ -85,6 +85,6 @@ def upload():
 #     return flask.redirect('/')
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=8000, debug=True)
+    app.run(debug=True)
     db.create_all()
    
