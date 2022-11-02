@@ -1,7 +1,5 @@
 <html>
-  <head>
-    <link href="static/style.css" rel="stylesheet">
-  </head>
+  {% if current_user.is_authenticated %}
   <body>
     <nav>
       <ul>
@@ -9,12 +7,24 @@
         <li><a href='/search'>Find Assignments</a></li>
         <li><a href='/upload'>Upload Assignments</a></li>
         <div class="topnav-right">
-          <li><a href='/login'>Login</a></li>
+          <li><a href='/account'>Account</a></li>
         </div>
         </ul>
     </nav>
-      {% block content %}
-      {% endblock %}
   </body>
-
+  {% else %}
+  <nav>
+    <ul>
+      <li><a href='/'>Home</a></li>
+      <li><a href='/search'>Find Assignments</a></li>
+      <!-- <li><a href='/upload'>Upload Assignments</a></li> -->
+      <div class="topnav-right">
+        <li><a href='/login'>Login</a></li>
+      </div>
+      </ul>
+  </nav>
+  {% endif %}
+  <link href="static/style.css" rel="stylesheet">
+  {% block content %}
+  {% endblock %}
 </html>
