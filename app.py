@@ -10,20 +10,28 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 db = SQLAlchemy(app)
 
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(20), nullable=False)
 
+
+from app import db, User
+
+
 @login_manager.user_loader
 def load_user(uid):
-    return uid
+    user = User.query.get(uid)
+    return user
+
+
 
 @app.route('/')
 def home():
     return render_template('home.html')
-
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -32,8 +40,9 @@ def login():
         if user != None:
             if request.form['pWord'] != user.password:
                 return render_template('login.html')
-            login_user(user)
-            return flask.redirect('/')
+            else:
+                login_user(user)
+                return flask.redirect('/')
         return render_template('login.html')
     return render_template('login.html')
 
@@ -47,16 +56,18 @@ def create():
         user = User.query.filter_by(username=request.form['uName']).first()
         if user != None:
             return render_template('create.html'), 'username already exists'
-        db.session.add(temp)
-        db.session.commit()
-        user = User.query.filter_by(username=request.form['uName']).first()
-        login_user(user)
-        return flask.redirect('/')
+        else:
+            db.session.add(temp)
+            db.session.commit()
+            user = User.query.filter_by(username=request.form['uName']).first()
+            login_user(user)
+            return flask.redirect('/')
     return render_template('create.html')
 
 
 
 @app.route('/upload')
+@login_required
 def upload():  
     return render_template('upload.html')
 

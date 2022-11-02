@@ -1,5 +1,5 @@
 <html>
-  {% if current_user.is_authenticated %}
+{% if current_user.is_authenticated %}
   <body>
     <nav>
       <ul>
@@ -11,8 +11,7 @@
         </div>
         </ul>
     </nav>
-  </body>
-  {% else %}
+{% else %}
   <nav>
     <ul>
       <li><a href='/'>Home</a></li>
@@ -23,8 +22,9 @@
       </div>
       </ul>
   </nav>
-  {% endif %}
+{% endif %}
   <link href="static/style.css" rel="stylesheet">
-  {% block content %}
-  {% endblock %}
+    {% block content %}
+    {% endblock %}
+  </body>
 </html>
