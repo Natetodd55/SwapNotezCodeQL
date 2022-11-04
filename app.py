@@ -76,24 +76,24 @@ def upload():
 def search():    
     return render_template('search.html')
 
-# @app.route('/update/', methods = ['GET', 'POST'])
-# @login_required
-# def update():
-#     if request.method == 'POST':
-#         oldPassword = request.form['oldP']
-#         if current_user.password != oldPassword:
-#             return render_template('update.html')
-#         updatedUser = User.query.filter_by(id=current_user.id).first()
-#         updatedUser.password = request.form['newP']
-#         db.session.commit()
-#         return flask.redirect('/')
-#     return render_template('update.html')
+@app.route('/update', methods = ['GET', 'POST'])
+@login_required
+def update():
+    if request.method == 'POST':
+        oldPassword = request.form['oldP']
+        if current_user.password != oldPassword:
+            return render_template('update.html')
+        updatedUser = User.query.filter_by(id=current_user.id).first()
+        updatedUser.password = request.form['newP']
+        db.session.commit()
+        return flask.redirect('/')
+    return render_template('update.html')
 
-# @app.route('/logout')
-# @login_required
-# def logout():
-#     logout_user()
-#     return flask.redirect('/')
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return flask.redirect('/')
 
 if __name__ == "__main__":
     app.run(debug=True)
