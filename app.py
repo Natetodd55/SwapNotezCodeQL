@@ -15,8 +15,28 @@ db = SQLAlchemy(app)
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    password = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    credits = db.Column(db.Integer, nullable=False)
+
+
+class Assignments(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    subject = db.Column(db.String(30), nullable=False)
+    grade = db.String(db.String(10))
+
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
+    ImageName = db.Column(db.String(50), nullable=False)
+
+class UserAccess(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    UserId = db.Column(db.Integer, db.ForeignKey('User.id'))
+    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
+
+
 
 
 from app import db, User
@@ -52,7 +72,7 @@ def create():
         username = request.form['uName']
         email = request.form['email']
         password = request.form['pWord']
-        temp = User(username = username, password = password, email = email)
+        temp = User(username = username, password = password, email = email, credits = 0)
         user = User.query.filter_by(username=request.form['uName']).first()
         if user != None:
             return render_template('create.html'), 'username already exists'
