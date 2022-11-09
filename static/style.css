@@ -27,44 +27,53 @@ ul {
     float: right;
   }
 
-  .accdrop{
-    position: top right;
-    display: block;
+  .dropdown{
+    float: left;
+    overflow: hidden;
+    float: right;
+   }
+
+   .dropdown .dropbtn {
+    font-size: 18px;  
     color: white;
-    text-align: center;
+    background-color: #d1290a;
+    border: none;
     padding: 18px 16px;
-    text-decoration: none;
-    font-size: 18px;
-    margin: 0;
   }
-  .accdrop:hover{
-    background-color: #781c0b;
-  } 
 
-  .dropdown {
-    display: inline-block;
-    position: top left;
-    padding: 8px 6px
-
-  }
   .dropdown-content {
     display: none;
     position: absolute;
-    /* width: 100%; */
     overflow: auto;
     box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
   }
+
+  .dropdown .dropbtn:hover {
+    background-color: #781c0b;
+  }
+
+  .dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+
   .dropdown:hover .dropdown-content {
     display: block;
   }
+
   .dropdown-content a {
     display: block;
     color: #FFFFFF;
     padding: 5px;
     text-decoration: none;
     background-color: #d1290a;
-    width: 83px;
+    width: 87px;
   }
+
   .dropdown-content a:hover {
     color: #FFFFFF;
     background-color: #781c0b;

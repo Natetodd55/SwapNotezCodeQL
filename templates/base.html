@@ -6,17 +6,16 @@
         <li><a href='/'>Home</a></li>
         <li><a href='/search'>Find Assignments</a></li>
         <li><a href='/upload'>Upload Assignments</a></li>
-        <div class="topnav-right">
           <div class="dropdown">
-            <a class="accdrop"> Account </a>
+            <button class="dropbtn">Account
+              <i class="fa fa-caret-down"></i>
+            </button>
             <div class="dropdown-content">
             <a href="/account">Account Details</a>
             <a href="/update">Change Password</a>
             <a href="/logout">Logout</a>
             </div>
           </div>
-          <!-- <li><a href='/account'>Account</a></li> -->
-        </div>
         </ul>
     </nav>
 {% else %}
@@ -24,7 +23,6 @@
     <ul>
       <li><a href='/'>Home</a></li>
       <li><a href='/search'>Find Assignments</a></li>
-      <!-- <li><a href='/upload'>Upload Assignments</a></li> -->
       <div class="topnav-right">
         <li><a href='/login'>Login</a></li>
       </div>

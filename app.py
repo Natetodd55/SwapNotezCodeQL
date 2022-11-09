@@ -10,48 +10,41 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 db = SQLAlchemy(app)
 
-
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False)
-    credits = db.Column(db.Integer, nullable=False)
+    credits = db.Column(db.Integer, default=0, nullable=False)
+    admin = db.Column(db.Boolean, default=False, nullable=False)
 
+# class Assignments(db.Model):
+#    id = db.Column(db.Integer, primary_key=True)
+#    name = db.Column(db.String(30), nullable=False)
+#    subject = db.Column(db.String(30), nullable=False)
+#    grade = db.String(db.String(10))
 
-class Assignments(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), nullable=False)
-    subject = db.Column(db.String(30), nullable=False)
-    grade = db.String(db.String(10))
+# class Image(db.Model):
+#    id = db.Column(db.Integer, primary_key = True)
+#    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
+#    ImageName = db.Column(db.String(50), nullable=False)
 
-class Image(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
-    ImageName = db.Column(db.String(50), nullable=False)
+# class UserAccess(db.Model):
+#    id = db.Column(db.Integer, primary_key = True)
+#    UserId = db.Column(db.Integer, db.ForeignKey('User.id'))
+#    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
 
-class UserAccess(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    UserId = db.Column(db.Integer, db.ForeignKey('User.id'))
-    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
-
-
-
-
-from app import db, User
-
+with app.app_context():
+    db.create_all()
 
 @login_manager.user_loader
 def load_user(uid):
-    user = User.query.get(uid)
-    return user
-
-
+    return User.query.get(uid)
 
 @app.route('/')
 def home():
     return render_template('home.html')
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -72,7 +65,7 @@ def create():
         username = request.form['uName']
         email = request.form['email']
         password = request.form['pWord']
-        temp = User(username = username, password = password, email = email, credits = 0)
+        temp = User(username = username, password = password, email = email)
         user = User.query.filter_by(username=request.form['uName']).first()
         if user != None:
             return render_template('create.html'), 'username already exists'
@@ -84,13 +77,10 @@ def create():
             return flask.redirect('/')
     return render_template('create.html')
 
-
-
 @app.route('/upload')
 @login_required
 def upload():  
     return render_template('upload.html')
-
 
 @app.route('/search')
 def search():    
@@ -117,5 +107,3 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
-    db.create_all()
-   
