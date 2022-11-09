@@ -78,3 +78,14 @@ ul {
     color: #FFFFFF;
     background-color: #781c0b;
   }
+  
+  .assinment-list{
+    padding: 15px 15px;
+    background-color: lightgray;
+    width: 50%;
+    height: 30%;
+  }
+
+  .assinment-list-item{
+    font-size: 24px; 
+  }
