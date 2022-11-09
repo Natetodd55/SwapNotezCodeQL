@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+{% for item in errrormsg %}
+    <form action="/updateName" method="POST">
+        Current Username: <input type="input" name="oldN"> <br>
+        New Username: <input type="input" name="newN"> {{item.msg}} <br>
+        <input type="submit" value="submit">
+    </form>
+{% endfor %}
+{% endblock %}

@@ -46,6 +46,26 @@ def load_user(uid):
 def home():
     return render_template('home.html')
 
+@app.route('/account')
+@login_required
+def account():
+    if current_user.admin == True:
+        data = [{
+            'creds':current_user.credits,
+            'email': current_user.email,
+            'username': current_user.username,
+            'isAdmin': True
+        }]  
+        return render_template('account.html', data = data)
+    else:
+        data = [{
+        'creds': current_user.credits,
+        'email' : current_user.email,
+        'username' : current_user.username
+        }]
+        return render_template('account.html', data = data)
+
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -87,18 +107,54 @@ def upload():
 def search():    
     return render_template('search.html')
 
-@app.route('/update', methods = ['GET', 'POST'])
+@app.route('/updatePass', methods = ['GET', 'POST'])
 @login_required
-def update():
+def updatePass():
     if request.method == 'POST':
         oldPassword = request.form['oldP']
         if current_user.password != oldPassword:
-            return render_template('update.html')
+            return render_template('updatePass.html')
         updatedUser = User.query.filter_by(id=current_user.id).first()
         updatedUser.password = request.form['newP']
         db.session.commit()
         return flask.redirect('/')
-    return render_template('update.html')
+    return render_template('updatePass.html')
+
+
+@app.route('/updateEmail', methods = ['GET', 'POST'])
+@login_required
+def updateEmail():
+    if request.method == 'POST':
+        oldemail = request.form['oldE']
+        if current_user.email != oldemail:
+            return render_template('updateEmail.html')
+            
+        updatedUser = User.query.filter_by(id=current_user.id).first()
+        updatedUser.email = request.form['newE']
+        db.session.commit()
+        return flask.redirect('/')
+    return render_template('updateEmail.html')
+
+@app.route('/updateName', methods = ['GET', 'POST'])
+@login_required
+def updateName():
+    if request.method == 'POST':
+        oldname = request.form['oldN']
+        if current_user.username != oldname:
+            return render_template('updateName.html')
+
+        namecheck = User.query.filter_by(username=request.form['uName']).first()
+        if namecheck != None:
+            errormsg = [{'msg': 'Username Unavailable'}]
+            return render_template('updateName.html', errormsg = errormsg)
+
+
+
+        updatedUser = User.query.filter_by(id=current_user.id).first()
+        updatedUser.username = request.form['newN']
+        db.session.commit()
+        return flask.redirect('/')
+    return render_template('updateName.html')
 
 @app.route('/logout')
 @login_required

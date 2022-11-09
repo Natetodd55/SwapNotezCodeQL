@@ -1,4 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    <head></head>
+{% for item in data %}
+{% if isAdmin %}
+    
+{% endif %}
+    <h1 class = "dispname">{{ item.username }}                        {{ item.creds }}</h1>
+    <head class = "dispemail">{{ item.email }}</head>
+{% endfor %}
 {% endblock %}
