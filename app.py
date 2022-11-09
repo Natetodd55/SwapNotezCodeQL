@@ -18,21 +18,22 @@ class User(UserMixin, db.Model):
     credits = db.Column(db.Integer, default=0, nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
-# class Assignments(db.Model):
-#    id = db.Column(db.Integer, primary_key=True)
-#    name = db.Column(db.String(30), nullable=False)
-#    subject = db.Column(db.String(30), nullable=False)
-#    grade = db.String(db.String(10))
+class Assignments(db.Model):
+   id = db.Column(db.Integer, primary_key=True)
+   name = db.Column(db.String(30), nullable=False)
+   subject = db.Column(db.String(30), nullable=False)
+   grade = db.Column(db.String(10))
+   varified = db.Column(db.Boolean, default=False, nullable=False)
 
-# class Image(db.Model):
-#    id = db.Column(db.Integer, primary_key = True)
-#    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
-#    ImageName = db.Column(db.String(50), nullable=False)
+class Image(db.Model):
+   id = db.Column(db.Integer, primary_key = True)
+   ImageName = db.Column(db.String(50), nullable=False)
+   AssignmentId = db.Column(db.Integer, db.ForeignKey(Assignments.id), nullable=False)
 
-# class UserAccess(db.Model):
-#    id = db.Column(db.Integer, primary_key = True)
-#    UserId = db.Column(db.Integer, db.ForeignKey('User.id'))
-#    AssignmentId = db.Column(db.Integer, db.ForeignKey('Assignments.id'))
+class UserAccess(db.Model):
+   id = db.Column(db.Integer, primary_key = True)
+   UserId = db.Column(db.Integer, db.ForeignKey(User.id))
+   AssignmentId = db.Column(db.Integer, db.ForeignKey(Assignments.id))
 
 with app.app_context():
     db.create_all()
