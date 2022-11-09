@@ -1,8 +1,27 @@
 {% extends "base.html" %}
-    {% block content %}
-        <body>
-        If you want to upload an assignment, please <a href='/login'>login</a>
-        </body>
-    {% endblock %}
+{% block content %}
+<form action="/create" method="POST" id="uploadForm">
+    Assingmnet Name: <input type="input" name="aName"> <br>
+    Subject/Class: <input type="input" name="aSubject"> <br>
+    Grade Recived: <input type="input" name="aGrade"> <br>
+    Image: <input type="file" name="pic0"><br>
+    <input type="button" value="add another file" onclick="addFile()"><br>
+    <input type="submit" value="UPLOAD">
+</form>
+<script>
+    var numImg = 0;
+    function addFile() {
+        // alert('Button Clcked');
 
-{% endif %}
+        // var form = document.getElementById("uploadForm");
+
+        // var uploadImg = document.createElement("input");
+        // uploadImg.setAttribute("type", file);
+        // uploadImg.setAttribute("name", "pic"+numImg);
+        // numImg++
+
+        // form.appendChild(uploadImg)
+        // form.appendChild(br.cloneNode());
+    }
+    </script>
+{% endblock %}
