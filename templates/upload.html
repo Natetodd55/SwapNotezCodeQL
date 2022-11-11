@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="/create" method="POST" id="uploadForm">
+<form action="/upload" method="POST" id="uploadForm" enctype="multipart/form-data">
     Assingmnet Name: <input type="input" name="aName"> <br>
     Subject/Class: <input type="input" name="aSubject"> <br>
     Grade Recived: <input type="input" name="aGrade"> <br>
-    Image: <input type="file" name="pic0"><br>
+    Image: <input type="file" name="pic"><br>
     <input type="button" value="add another file" onclick="addFile()"><br>
     <input type="submit" value="UPLOAD">
 </form>
