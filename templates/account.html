@@ -4,7 +4,9 @@
 {% if isAdmin %}
     
 {% endif %}
-    <h1 class = "dispname">{{ item.username }}                        {{ item.creds }}</h1>
-    <head class = "dispemail">{{ item.email }}</head>
+    <h1 class = "dispname">User: {{ item.username }} <button onclick = "location.href = '/updateName'">Change Username</button> </h1>
+    <h2 class = "dispemail">Email: {{ item.email }} <button onclick = "location.href = '/updateEmail'">Change Email</button> </h2>
+    <h3 class = "dispcreds">Credits: {{ item.creds }}  </h3>
+    
 {% endfor %}
 {% endblock %}

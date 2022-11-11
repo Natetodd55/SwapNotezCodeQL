@@ -89,3 +89,8 @@ ul {
   .assinment-list-item{
     font-size: 24px; 
   }
+
+.dispcreds h2{
+  position: top right;
+  font-size: 24px;
+}

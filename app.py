@@ -143,9 +143,11 @@ def updateName():
         if current_user.username != oldname:
             return render_template('updateName.html')
 
-        namecheck = User.query.filter_by(username=request.form['uName']).first()
+
+        namecheck = User.query.filter_by(username=request.form['newN'])
         if namecheck != None:
-            errormsg = [{'msg': 'Username Unavailable'}]
+            errormsg = True
+            print("going in")
             return render_template('updateName.html', errormsg = errormsg)
 
 
