@@ -2,7 +2,7 @@
 {% block content %}
 <form action="/updateName" method="POST">
     Current Username: <input type="input" name="oldN"> <br>
-    New Username: <input type="input" name="newN">{% if errrormsg == True %} NOT AVAILABLE {% endif %} <br>
+    New Username: <input type="input" name="newN">{% if errrormsg %} NOT AVAILABLE {% endif %} <br>
     <input type="submit" value="submit">
 </form>
 {% endblock %}
