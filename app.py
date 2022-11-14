@@ -1,7 +1,9 @@
 import flask
+import os
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -9,6 +11,7 @@ app.config['SECRET_KEY'] = 'secretKey'
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 db = SQLAlchemy(app)
+app.config["IMAGE_UPLOADS"] = "static\\assingment_img"
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +27,7 @@ class Assignments(db.Model):
    subject = db.Column(db.String(30), nullable=False)
    grade = db.Column(db.String(10))
    varified = db.Column(db.Boolean, default=False, nullable=False)
+   uploadedBy = db.Column(db.Integer, db.ForeignKey(User.id))
 
 class Image(db.Model):
    id = db.Column(db.Integer, primary_key = True)
@@ -98,9 +102,44 @@ def create():
             return flask.redirect('/')
     return render_template('create.html')
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET','POST'])
 @login_required
 def upload():  
+    if request.method == 'POST':
+        assinmentName = request.form['aName']
+        assinmentSubject = request.form['aSubject']
+        assinmentGrade = request.form['aGrade']
+        userId = current_user.id
+
+        if request.form['aName'] == 'err':
+            assinmentName = 'Unknown'
+        if request.form['aSubject'] == 'err':
+            assinmentSubject = 'Unknown'
+        if request.form['aGrade'] == 'err':
+            assinmentGrade = 'Unknown'
+
+        newAssinmnet = Assignments(name = assinmentName, subject = assinmentSubject, grade = assinmentGrade, varified = False, uploadedBy = userId)
+        db.session.add(newAssinmnet)
+        db.session.commit()
+
+        image = request.files['pic']
+        if not image:
+            return render_template('upload.html') #Return Error
+        newImg = Image(ImageName = '-1', AssignmentId = newAssinmnet.id)
+        db.session.add(newImg)
+        db.session.commit()
+
+        image.filename = str(newImg.id)
+        filename = secure_filename(image.filename)
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        image.save(os.path.join(basedir, app.config["IMAGE_UPLOADS"], filename))
+
+        upImg = Image.query.filter_by(id=newImg.id).first()
+        upImg.ImageName = newImg.id
+        db.session.commit()
+
+        return render_template('upload.html')
+
     return render_template('upload.html')
 
 @app.route('/search')
