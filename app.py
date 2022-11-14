@@ -1,5 +1,6 @@
 import flask
 import os
+import re
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -84,12 +85,27 @@ def login():
         return render_template('login.html')
     return render_template('login.html')
 
+def check(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if(re.fullmatch(regex, email)):
+        print("Valid")
+        return True
+    else:
+        print("Invalid")
+        return False
+
+
 @app.route('/create', methods = ['GET', 'POST'])
 def create():
+    
+    
     if request.method == 'POST':
         username = request.form['uName']
         email = request.form['email']
         password = request.form['pWord']
+        if check(email) == False:
+            return render_template('create.html'), 'Invalid Email Address'
+
         temp = User(username = username, password = password, email = email)
         user = User.query.filter_by(username=request.form['uName']).first()
         if user != None:
@@ -167,6 +183,15 @@ def updateEmail():
         oldemail = request.form['oldE']
         if current_user.email != oldemail:
             return render_template('updateEmail.html')
+
+        if check(request.form['newE']) == False:
+            return render_template('create.html'), 'Invalid Email Address'
+
+        emailcheck = User.query.filter_by(email=request.form['newE'])
+        if emailcheck != None:
+            errormsg = True
+            print("going in")
+            return render_template('updateEmail.html', errormsg = errormsg)
             
         updatedUser = User.query.filter_by(id=current_user.id).first()
         updatedUser.email = request.form['newE']
