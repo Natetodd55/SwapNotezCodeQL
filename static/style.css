@@ -80,10 +80,11 @@ ul {
   }
   
   .assinment-list{
-    padding: 15px 15px;
+    /* padding: 15px 15px; */
     background-color: lightgray;
-    width: 50%;
-    height: 30%;
+    display: inline-block;
+    /* width: 50%;
+    height: 30%; */
   }
 
   .assinment-list-item{

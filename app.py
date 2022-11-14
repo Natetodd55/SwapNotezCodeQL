@@ -158,9 +158,13 @@ def upload():
 
     return render_template('upload.html')
 
-@app.route('/search')
+@app.route('/search', methods = ['GET', 'POST'])
 def search():    
-    return render_template('search.html')
+    assinments = []
+    for i in range(5):
+        if Assignments.query.filter_by(id=i) == None:
+            assinments.append(Assignments.query.filter_by(id=i))
+    return render_template('search.html', assinments = assinments)
 
 @app.route('/updatePass', methods = ['GET', 'POST'])
 @login_required
