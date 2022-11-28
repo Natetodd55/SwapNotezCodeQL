@@ -49,19 +49,23 @@ def load_user(uid):
 
 @app.route('/')
 def home():
+    if (User.query.filter_by(username="admin") == False):
+        temp = User(username = "admin", password = "123", email = "coolEmail@gmail.com", credits = 100, admin = True)
+        db.session.add(temp)
+        db.session.commit()
     return render_template('home.html')
 
 @app.route('/account')
 @login_required
 def account():
-    if current_user.admin == True:
+    if current_user.admin == 1:
         data = [{
             'creds':current_user.credits,
             'email': current_user.email,
             'username': current_user.username,
             'isAdmin': True
         }]  
-        return render_template('account.html', data = data)
+        return render_template('account.html', data = data, admin = 1)
     else:
         data = [{
         'creds': current_user.credits,
@@ -225,6 +229,11 @@ def updateName():
         db.session.commit()
         return flask.redirect('/')
     return render_template('updateName.html')
+
+@app.route('/verify')
+def verify():
+    assignments = Assignments.query.filter_by(varified=False)
+    return render_template('verify.html', assignments=assignments)
 
 @app.route('/logout')
 @login_required
