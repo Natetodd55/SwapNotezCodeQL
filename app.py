@@ -55,9 +55,15 @@ def home():
         db.session.commit()
     return render_template('home.html')
 
-@app.route('/account')
+
+
+@app.route('/account', methods = ['GET', 'POST'])
 @login_required
 def account():
+    if request.method == 'POST':
+        current_user.credits = current_user.credits+1
+        db.session.commit()
+
     if current_user.admin == 1:
         data = [{
             'creds':current_user.credits,
@@ -234,6 +240,12 @@ def updateName():
 def verify():
     assignments = Assignments.query.filter_by(varified=False)
     return render_template('verify.html', assignments=assignments)
+
+
+@app.route('/credits')
+@login_required
+def credits():
+    return render_template('tempcredits.html')
 
 @app.route('/logout')
 @login_required
