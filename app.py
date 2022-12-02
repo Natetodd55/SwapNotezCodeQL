@@ -5,6 +5,7 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
+from dataclasses import dataclass
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -168,13 +169,24 @@ def upload():
 
     return render_template('upload.html')
 
+@dataclass
+class A_Item:
+    name: str
+    subject: str
+    grade: str
+    imageName: str
+
+
 @app.route('/search', methods = ['GET', 'POST'])
 def search():    
-    assinments = []
+    A_Items = []
     for i in range(5):
         if Assignments.query.filter_by(id=i) == None:
-            assinments.append(Assignments.query.filter_by(id=i))
-    return render_template('search.html', assinments = assinments)
+            assignment = Assignments.query.filter_by(id=i).first()
+            item = A_Items(assignment.name, assignment.subject, 
+                           assignment.grade, Image.query.filter_by(AssignmentId = assignment.id).ImageName)
+            A_Items.append(item)
+    return render_template('search.html', A_Items = A_Items)
 
 @app.route('/updatePass', methods = ['GET', 'POST'])
 @login_required

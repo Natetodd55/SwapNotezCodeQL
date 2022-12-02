@@ -5,28 +5,21 @@
 
   <ul class="assinment-list">
 
-    {% if assinments %}
+    {% if A_Items %}
     <script>
-      assinments = "{{assinments}}";
-      // document.write(assinments);
-      // document.write("<br>");
-      // document.write(assinments.length);
-      for (i = 0; i < (assinments.length)/67; i++){
+      assinments = "{{A_Items}}";
+
+      for (i = 0; i < assinments.length; i++){
         document.write("<li class=\"assinment-list-item\">");
-        document.write("<img src=\"static/assingment_img/temp.jpg\" class=\"assingment-img\">");
-        document.write("<span>Assinment Name</span><br>");
-        document.write("<span>Assinment Description</span>");
+        document.write("<li class=\""+assinments[i]+"\">");
+        // document.write("<img src=\"static/assingment_img/temp.jpg\" class=\"assingment-img\">");
+        // document.write("<span>"+assinmnets.name+"</span><br>");
+        // document.write("<span>"+assinmnets.description+"</span>");
         document.write("</li>");
       }
+
     </script>
     {% endif %}
-    <!-- <li class="assinment-list-item">
-
-      <img src="static/assingment_img/temp.jpg" class="assingment-img">
-      <span>Assinment Name</span>
-      <span>Assinment Description</span>
-
-    </li> -->
   </ul>
 
 {% endblock %}
