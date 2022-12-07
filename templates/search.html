@@ -2,11 +2,13 @@
 {% block title %}Search{% endblock %}
 {% block content %}
 
-{% for item in data %}
-    <h1>{{ item.name }}</h1>
-    <h2>{{ item.subject }}</h2>
-    <h3>{{ item.grade }}</h3>
-    <h4>{{ item.imagename }}</h4>
+{% for list in dList %}
+  {% for name, subject, grade in list %}
+    <h1>name: {{name}}</h1>
+    <h2>subject: {{subject}}</h2>
+    <h1>grade: {{grade}}</h1>
+    <!-- <h2>imgName: {{imgName}}</h2> -->
+  {% endfor %}
 {% endfor %}
   <ul class="assinment-list">
 
