@@ -179,14 +179,22 @@ class A_Item:
 
 @app.route('/search', methods = ['GET', 'POST'])
 def search():    
-    A_Items = []
-    for i in range(5):
-        if Assignments.query.filter_by(id=i) == None:
-            assignment = Assignments.query.filter_by(id=i).first()
-            item = A_Items(assignment.name, assignment.subject, 
-                           assignment.grade, Image.query.filter_by(AssignmentId = assignment.id).ImageName)
-            A_Items.append(item)
-    return render_template('search.html', A_Items = A_Items)
+    # A_Items = []
+    # for i in range(5):
+    #     if Assignments.query.filter_by(id=i) == None:
+    assignment = Assignments.query.filter_by(id=1).first()
+            # item = A_Items(assignment.name, assignment.subject, 
+            #                assignment.grade, Image.query.filter_by(AssignmentId = assignment.id).ImageName)
+            # A_Items.append(item)
+    print(assignment.name, assignment.subject, assignment.grade)
+    img = Image.query.filter_by(AssignmentId = assignment.id).first()
+    data = [{
+        'name': assignment.name,
+        'subject': assignment.subject,
+        'grade': assignment.grade,
+        'imagename': img.ImageName
+        }]
+    return render_template('search.html', data = data)
 
 @app.route('/updatePass', methods = ['GET', 'POST'])
 @login_required

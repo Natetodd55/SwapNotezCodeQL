@@ -2,24 +2,33 @@
 {% block title %}Search{% endblock %}
 {% block content %}
 
-
+{% for item in data %}
+    <h1>{{ item.name }}</h1>
+    <h2>{{ item.subject }}</h2>
+    <h3>{{ item.grade }}</h3>
+    <h4>{{ item.imagename }}</h4>
+{% endfor %}
   <ul class="assinment-list">
 
-    {% if A_Items %}
-    <script>
-      assinments = "{{A_Items}}";
+    <!-- {% if A_Items %} -->
+  
 
-      for (i = 0; i < assinments.length; i++){
-        document.write("<li class=\"assinment-list-item\">");
-        document.write("<li class=\""+assinments[i]+"\">");
-        // document.write("<img src=\"static/assingment_img/temp.jpg\" class=\"assingment-img\">");
-        // document.write("<span>"+assinmnets.name+"</span><br>");
-        // document.write("<span>"+assinmnets.description+"</span>");
-        document.write("</li>");
-      }
+    <script>
+      // assingments = "{{A_Items}}";
+      // document.write(assingments)
+      // document.write(assingments.length)
+
+      // for (i = 0; i < assingments.length; i++){
+      //   document.write("<li class=\"assinment-list-item\">");
+      //   document.write("<li class=\""+assingments[i]+"\">");
+      //   // document.write("<img src=\"static/assingment_img/temp.jpg\" class=\"assingment-img\">");
+      //   // document.write("<span>"+assinmnets.name+"</span><br>");
+      //   // document.write("<span>"+assinmnets.description+"</span>");
+      //   document.write("</li>");
+      //}
 
     </script>
-    {% endif %}
+    <!-- {% endif %} -->
   </ul>
 
 {% endblock %}
