@@ -95,3 +95,12 @@ ul {
   position: top right;
   font-size: 24px;
 }
+
+.assignmenttable table, tr, td{
+  border: 1px solid;
+}
+
+.assingment-img-blur{
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+}

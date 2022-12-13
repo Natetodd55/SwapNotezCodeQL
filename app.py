@@ -180,18 +180,52 @@ class A_Item:
 @app.route('/search', methods = ['GET', 'POST'])
 def search():    
     dList = []
-    for i in range(1, 6):
-        if Assignments.query.filter_by(id=i).first() == None:
+    for i in range(1, (len(Assignments.query.all())+1)):
+        if Assignments.query.filter_by(id=i).first() != None:
             assignment = Assignments.query.filter_by(id=i).first()
-            img = Image.query.filter_by(AssignmentId = assignment.id).first()
-            data = [{
-                'name': assignment.name,
-                'subject': assignment.subject,
-                'grade': assignment.grade,
-                'imagename': img.ImageName
-            }]
-            dList.append(data)
+            if assignment.varified == True:
+                img = Image.query.filter_by(AssignmentId = assignment.id).first()
+                data = [{
+                    'id' : assignment.id,
+                    'name': assignment.name,
+                    'subject': assignment.subject,
+                    'grade': assignment.grade,
+                    'imagename': img.ImageName
+                }]
+                dList.append(data)
+            else:
+                i += 1
     return render_template('search.html', dList = dList)
+
+@app.route('/assignment/<id>')
+def inspect(id):
+    dList = []
+    if current_user.is_authenticated:
+        accessid = UserAccess.query.filter_by(AssignmentId=id).all()
+        print(accessid)
+        if accessid == None:
+            #use credit to buy
+            print("no access id")
+        for user in accessid:
+            if user.UserId == current_user.id:
+                assignment = Assignments.query.filter_by(id=id).first()
+                if assignment.varified == True:
+                    img = Image.query.filter_by(AssignmentId = assignment.id).first()
+                    data = [{
+                        'id' : assignment.id,
+                        'name': assignment.name,
+                        'subject': assignment.subject,
+                        'grade': assignment.grade,
+                        'imagename': img.ImageName
+                        }]
+                    dList.append(data)
+                return render_template('assignment.html', dList = dList)
+            else:
+                #use credits to buy or give option to buy credits
+                print("hello")
+    else:
+        return flask.redirect('/login')
+
 
 @app.route('/updatePass', methods = ['GET', 'POST'])
 @login_required

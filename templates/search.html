@@ -3,34 +3,17 @@
 {% block content %}
 
 {% for list in dList %}
-  {% for name, subject, grade in list %}
-    <h1>name: {{name}}</h1>
-    <h2>subject: {{subject}}</h2>
-    <h1>grade: {{grade}}</h1>
-    <!-- <h2>imgName: {{imgName}}</h2> -->
+  {% for item in list %}
+    <table class="assignmenttable">
+      <tr class="assignmenttable">
+        
+        <td class="assignmenttable"><a href="/assignment/{{item.id}}"><img src="static/assingment_img/{{item.imagename}}" class="assingment-img-blur" width="100" height="100"></a></td>
+        <td class="assignmenttable"><a href="/assignment/{{item.id}}"><h1>name: {{item.name}}</h1><br>
+        <h2>subject: {{item.subject}}</h2><br>
+        <h1>grade: {{item.grade}}</h1></a></td> 
+      </tr>
+    </table>
+    
   {% endfor %}
 {% endfor %}
-  <ul class="assinment-list">
-
-    <!-- {% if A_Items %} -->
-  
-
-    <script>
-      // assingments = "{{A_Items}}";
-      // document.write(assingments)
-      // document.write(assingments.length)
-
-      // for (i = 0; i < assingments.length; i++){
-      //   document.write("<li class=\"assinment-list-item\">");
-      //   document.write("<li class=\""+assingments[i]+"\">");
-      //   // document.write("<img src=\"static/assingment_img/temp.jpg\" class=\"assingment-img\">");
-      //   // document.write("<span>"+assinmnets.name+"</span><br>");
-      //   // document.write("<span>"+assinmnets.description+"</span>");
-      //   document.write("</li>");
-      //}
-
-    </script>
-    <!-- {% endif %} -->
-  </ul>
-
 {% endblock %}
