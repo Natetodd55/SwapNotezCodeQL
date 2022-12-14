@@ -324,6 +324,8 @@ def verify():
 def verifyass(id):
     if request.method == 'POST':
         assignment = Assignments.query.filter_by(id=id).first()
+        user = User.query.filter_by(id = assignment.uploadedBy).first()
+        user.credits += 1
         assignment.varified = True
         db.session.add(assignment)
         db.session.commit()
