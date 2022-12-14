@@ -1,8 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-{% for item in assignments %}
-
-<p>FUCK</p>
+{% for list in dList %}
+  {% for item in list %}
+    <table class="assignmenttable">
+      <tr class="assignmenttable">
+        
+        <td class="assignmenttable"><img src="/static/assingment_img/{{item.imagename}}" class="assingment-img" width="100" height="100"></td>
+        <td class="assignmenttable"><h1>name: {{item.name}}</h1><br>
+        <h2>subject: {{item.subject}}</h2><br>
+        <h1>grade: {{item.grade}}</h1></td> 
+        
+      </tr>
+    </table>
+    <form action="/verify/{{item.id}}" method = "POST">
+        <input type="submit" value="verify">
+    </form>
+    <form action="/delete/{{item.id}}" method = "POST">
+        <input type="submit" value="delete">
+    </form>
     
+    
+  {% endfor %}
 {% endfor %}
 {% endblock %}

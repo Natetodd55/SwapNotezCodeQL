@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Assignment{% endblock %}
+{% block content %}
+{% for item in data %}
+    <h1>Credits: {{item.cred}}</h1>
+    <form action="/buyassignment/{{item.id}}" method = "POST">
+        <input type="submit" value="Buy with Credits">
+    </form>
+    <button onclick = "location.href = '/credits'">Buy Credits</button>
+    <button onclick = "location.href = '/upload'">Upload assignment to earn Credits</button>
+{% endfor %}
+{% endblock %}

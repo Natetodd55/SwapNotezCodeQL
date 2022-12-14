@@ -1,27 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="/upload" method="POST" id="uploadForm" enctype="multipart/form-data">
-    Assingmnet Name: <input type="input" name="aName"> <br>
-    Subject/Class: <input type="input" name="aSubject"> <br>
-    Grade Recived: <input type="input" name="aGrade"> <br>
-    Image: <input type="file" name="pic"><br>
-    <input type="button" value="add another file" onclick="addFile()"><br>
-    <input type="submit" value="UPLOAD">
-</form>
-<script>
-    var numImg = 0;
-    function addFile() {
-        // alert('Button Clcked');
+<table>
+    <tr>
+        <td>
+        <form action="/upload" method="POST" id="uploadForm" enctype="multipart/form-data">
+            Assingmnet Name: <input type="input" name="aName"> <br>
+            Subject/Class: <input type="input" name="aSubject"> <br>
+            Grade Recived: <input type="input" name="aGrade"> <br>
+            Image: <input type="file" name="pic"><br>
+            <input type="submit" value="UPLOAD">
+        </form>
+        </td>
+        <td><h>Information / Disclaimer:<br>
+            -After uploading an assignment an admin must verify the assignment before being granted credits<br>
+            -If too many invalid assignments are submitted your account may be banned<br>
+            -Assignments must have a grade above 60%<br>
+            -Please make sure assignments are visible/not blurry<br>
+            -Only upload pictures(e.g. .jpg, .jpeg, .pdf) NO .gif or .mp3/.mp4 files<br>
 
-        // var form = document.getElementById("uploadForm");
+        </h></td>
+    </tr>
 
-        // var uploadImg = document.createElement("input");
-        // uploadImg.setAttribute("type", file);
-        // uploadImg.setAttribute("name", "pic"+numImg);
-        // numImg++
+</table>
 
-        // form.appendChild(uploadImg)
-        // form.appendChild(br.cloneNode());
-    }
-    </script>
 {% endblock %}

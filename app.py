@@ -180,7 +180,37 @@ class A_Item:
 @app.route('/search', methods = ['GET', 'POST'])
 def search():    
     dList = []
-    for i in range(1, (len(Assignments.query.all())+1)):
+    lastass = Assignments.query.order_by(Assignments.id.desc()).first()
+    if request.method == "POST":
+        for i in range(1, (lastass.id+1)):
+            tempAss = Assignments.query.filter_by(id = i).first()
+            print(tempAss)
+            print(request.form['aName'])
+            if tempAss != None:
+                if tempAss.name == request.form['aName']:  
+                    if tempAss.varified == True:
+                        img = Image.query.filter_by(AssignmentId = tempAss.id).first()
+                        data = [{
+                            'id' : tempAss.id,
+                            'name': tempAss.name,
+                            'subject': tempAss.subject,
+                            'grade': tempAss.grade,
+                            'imagename': img.ImageName
+                        }]
+                    dList.append(data)
+                if tempAss.subject == request.form['aSubject']:  
+                    if tempAss.varified == True:
+                        img = Image.query.filter_by(AssignmentId = tempAss.id).first()
+                        data = [{
+                            'id' : tempAss.id,
+                            'name': tempAss.name,
+                            'subject': tempAss.subject,
+                            'grade': tempAss.grade,
+                            'imagename': img.ImageName
+                        }]
+                    dList.append(data)
+        return render_template('search.html', dList = dList)
+    for i in range(1, (lastass.id+1)):
         if Assignments.query.filter_by(id=i).first() != None:
             assignment = Assignments.query.filter_by(id=i).first()
             if assignment.varified == True:
@@ -194,37 +224,61 @@ def search():
                 }]
                 dList.append(data)
             else:
-                i += 1
+                continue
+        else:
+            continue
+            
     return render_template('search.html', dList = dList)
 
 @app.route('/assignment/<id>')
 def inspect(id):
     dList = []
     if current_user.is_authenticated:
-        accessid = UserAccess.query.filter_by(AssignmentId=id).all()
+        accessid = UserAccess.query.filter_by(AssignmentId=id, UserId = current_user.id).all()
         print(accessid)
-        if accessid == None:
-            #use credit to buy
-            print("no access id")
-        for user in accessid:
-            if user.UserId == current_user.id:
-                assignment = Assignments.query.filter_by(id=id).first()
-                if assignment.varified == True:
-                    img = Image.query.filter_by(AssignmentId = assignment.id).first()
-                    data = [{
-                        'id' : assignment.id,
-                        'name': assignment.name,
-                        'subject': assignment.subject,
-                        'grade': assignment.grade,
-                        'imagename': img.ImageName
-                        }]
-                    dList.append(data)
-                return render_template('assignment.html', dList = dList)
-            else:
-                #use credits to buy or give option to buy credits
-                print("hello")
+        if accessid == []:
+            print("option 1")
+            return flask.redirect('/buyassignment/'+id)
+        else:
+            assignment = Assignments.query.filter_by(id=id).first()
+            if assignment.varified == True:
+                img = Image.query.filter_by(AssignmentId = assignment.id).first()
+                data = [{
+                    'id' : assignment.id,
+                    'name': assignment.name,
+                    'subject': assignment.subject,
+                    'grade': assignment.grade,
+                    'imagename': img.ImageName
+                }]
+            dList.append(data)
+            return render_template('assignment.html', dList = dList)
     else:
         return flask.redirect('/login')
+
+
+@app.route('/buyassignment/<id>', methods = ['GET', 'POST'])
+def buyassignment(id):
+    if request.method == 'POST':
+        print("IN POST")
+        if current_user.credits > 0:
+            print(current_user.credits)
+            current_user.credits -= 1
+            print(current_user.credits)
+            temp = UserAccess(UserId = current_user.id, AssignmentId = id)
+            db.session.add(temp)
+            db.session.commit()
+            print("redirect to assignment")
+            return flask.redirect('/assignment/'+id)
+        else:
+            return flask.redirect('/credits')
+    
+    data = [{
+        'cred' : current_user.credits,
+        'id' : id
+    }]
+    return render_template('buyassignment.html', data=data)
+
+
 
 
 @app.route('/updatePass', methods = ['GET', 'POST'])
@@ -241,62 +295,55 @@ def updatePass():
     return render_template('updatePass.html')
 
 
-@app.route('/updateEmail', methods = ['GET', 'POST'])
-@login_required
-def updateEmail():
-    if request.method == 'POST':
-        oldemail = request.form['oldE']
-        if current_user.email != oldemail:
-            return render_template('updateEmail.html')
-
-        if check(request.form['newE']) == False:
-            return render_template('create.html'), 'Invalid Email Address'
-
-        emailcheck = User.query.filter_by(email=request.form['newE'])
-        if emailcheck != None:
-            errormsg = True
-            print("going in")
-            return render_template('updateEmail.html', errormsg = errormsg)
-            
-        updatedUser = User.query.filter_by(id=current_user.id).first()
-        updatedUser.email = request.form['newE']
-        db.session.commit()
-        return flask.redirect('/')
-    return render_template('updateEmail.html')
-
-@app.route('/updateName', methods = ['GET', 'POST'])
-@login_required
-def updateName():
-    if request.method == 'POST':
-        oldname = request.form['oldN']
-        if current_user.username != oldname:
-            return render_template('updateName.html')
 
 
-        namecheck = User.query.filter_by(username=request.form['newN'])
-        if namecheck != None:
-            errormsg = True
-            print("going in")
-            return render_template('updateName.html', errormsg = errormsg)
-
-
-
-        updatedUser = User.query.filter_by(id=current_user.id).first()
-        updatedUser.username = request.form['newN']
-        db.session.commit()
-        return flask.redirect('/')
-    return render_template('updateName.html')
 
 @app.route('/verify')
+@login_required
 def verify():
-    assignments = Assignments.query.filter_by(varified=False)
-    return render_template('verify.html', assignments=assignments)
+    dList=[]
+    assignment = Assignments.query.filter_by(varified=False).all()
+    print(assignment)
+    if assignment == []:
+        return flask.redirect('/account')
+
+    for ass in assignment:
+        img = Image.query.filter_by(AssignmentId = ass.id).first()
+        data = [{
+            'id' : ass.id,
+            'name': ass.name,
+            'subject': ass.subject,
+            'grade': ass.grade,
+            'imagename': img.ImageName
+        }]
+        dList.append(data)
+    return render_template('verify.html', dList = dList)
+
+@app.route('/verify/<id>', methods = ['GET', 'POST'])
+@login_required
+def verifyass(id):
+    if request.method == 'POST':
+        assignment = Assignments.query.filter_by(id=id).first()
+        assignment.varified = True
+        db.session.add(assignment)
+        db.session.commit()
+        return flask.redirect('/verify')
+
+@app.route('/delete/<id>', methods = ['GET', 'POST'])
+@login_required
+def deleteass(id):
+    if request.method == 'POST':
+        assignment = Assignments.query.filter_by(id=id).first()
+        db.session.delete(assignment)
+        db.session.commit()
+        return flask.redirect('/verify')
+
 
 
 @app.route('/credits')
 @login_required
 def credits():
-    return render_template('tempcredits.html')
+    return render_template('credits.html')
 
 @app.route('/logout')
 @login_required
